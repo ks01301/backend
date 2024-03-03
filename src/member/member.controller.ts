@@ -20,20 +20,20 @@ export class MemberController {
   }
 
   @Post('signup')
-  async createMember(@Body() memberCreateDto: MemberCreateDto) {
-    return this.memberService.createMember(memberCreateDto);
+  async createMember(@Body() body: MemberCreateDto) {
+    return this.memberService.createMember(body);
   }
 
   @Patch(':id')
-  async updatemember(@Param('id') id: string, @Body() updateDto: UpdateDto) {
-    return await this.memberService.updatemember(id, updateDto);
+  async updatemember(@Param('id') id: string, @Body() body: UpdateDto) {
+    return await this.memberService.updatemember(id, body);
   }
   @Delete(':id')
   async deletemember(@Param('id') id: string) {
     return await this.memberService.deletemember(id);
   }
   @Post('login')
-  async login(@Body() loginDto: LoginDto) {
-    return await this.memberService.login(loginDto);
+  async login(@Body() body: LoginDto) {
+    return await this.memberService.login(body);
   }
 }

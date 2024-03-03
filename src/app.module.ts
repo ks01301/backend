@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MemberModule } from './member/member.module';
+import { BoardModule } from './board/board.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { MemberModule } from './member/member.module';
       synchronize: Boolean(process.env.POSTGRES_SYNC),
     }),
     MemberModule,
+    BoardModule,
   ],
   controllers: [AppController],
   providers: [AppService],
