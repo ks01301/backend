@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { LoginDto, MemberCreateDto, UpdateDto } from './dto/member.dto';
 
@@ -16,13 +16,16 @@ export class MemberController {
     return this.memberService.createMember(memberCreateDto);
   }
 
+  @Post('updatemember')
+  async updatemember(@Body() updateDto: UpdateDto) {
+    return await this.memberService.updatemember(updateDto);
+  }
+  @Delete(':id')
+  async deletemember(@Param('id') id: string) {
+    return await this.memberService.deletemember(id);
+  }
   @Post('login')
   async login(@Body() loginDto: LoginDto) {
     return await this.memberService.login(loginDto);
-  }
-
-  @Post('updatemember')
-  async update(@Body() updateDto: UpdateDto) {
-    return await this.memberService.update(updateDto);
   }
 }

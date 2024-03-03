@@ -58,7 +58,7 @@ export class MemberService {
     }
   }
 
-  async update(updateDto: UpdateDto) {
+  async updatemember(updateDto: UpdateDto) {
     const data = { ...updateDto };
 
     delete data.id;
@@ -71,6 +71,15 @@ export class MemberService {
     }
     console.log(data);
     return await this.memberRepository.update({ id: updateDto.id }, data);
+  }
+
+  async deletemember(id: string) {
+    const idCheck = await this.idCheck(id);
+    if (idCheck) {
+      return await this.memberRepository.delete({ id });
+    } else {
+      throw new UnauthorizedException('아이디 없음');
+    }
   }
 
   async login(loginDto: LoginDto) {
