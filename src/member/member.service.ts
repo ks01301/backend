@@ -1,9 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { MemberEntity } from './entities/member.entity';
 import * as bcrypt from 'bcrypt';
-import { LoginDto } from './dto/member.dto';
+import { LoginDto, UpdateDto } from './dto/member.dto';
 
 @Injectable()
 export class MemberService {
@@ -16,9 +16,9 @@ export class MemberService {
     return `This action returns all test`;
   }
 
-  async idCheck(memberId: string) {
+  async idCheck(id: string) {
     const idCheck = await this.memberRepository.findOne({
-      where: { id: memberId },
+      where: { id },
     });
     if (idCheck) {
       return true;
@@ -37,7 +37,6 @@ export class MemberService {
       loginDto.password,
       originpassword.password,
     );
-    console.log('password : ' + passwordCheck);
 
     if (passwordCheck) {
       return true;
@@ -47,11 +46,44 @@ export class MemberService {
   }
 
   async createMember(memberCreateDto) {
-    memberCreateDto.password = await bcrypt.hash(memberCreateDto.password, 10);
-    return await this.memberRepository.save(memberCreateDto);
+    const idCheck = await this.idCheck(memberCreateDto.id);
+    if (idCheck) {
+      throw new Error('이미 존재하는 아이디입니다.');
+    } else {
+      memberCreateDto.password = await bcrypt.hash(
+        memberCreateDto.password,
+        10,
+      );
+      return await this.memberRepository.save(memberCreateDto);
+    }
   }
 
-  async login() {
-    return '로그인 성공!';
+  async update(updateDto: UpdateDto) {
+    const data = { ...updateDto };
+
+    delete data.id;
+    delete data.password;
+
+    for (const key in data) {
+      if (data[key] === null || data[key] === undefined || data[key] === '') {
+        delete data[key];
+      }
+    }
+    console.log(data);
+    return await this.memberRepository.update({ id: updateDto.id }, data);
+  }
+
+  async login(loginDto: LoginDto) {
+    const idCheck = await this.idCheck(loginDto.id);
+    if (idCheck) {
+      const passwordCheck = await this.passwordCheck(loginDto);
+      if (passwordCheck) {
+        return '로그인 성공';
+      } else {
+        throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+      }
+    } else {
+      throw new UnauthorizedException('존재하지 않는 아이디입니다.');
+    }
   }
 }

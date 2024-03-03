@@ -25,7 +25,6 @@ import { MemberModule } from './member/member.module';
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: Boolean(process.env.POSTGRES_SYNC),
     }),
-
     MemberModule,
   ],
   controllers: [AppController],

@@ -39,3 +39,32 @@ export class LoginDto {
   @IsNotEmpty()
   password: string;
 }
+export class UpdateDto {
+  @IsString()
+  @IsNotEmpty()
+  id: string;
+
+  @IsOptional()
+  @IsString()
+  name: string;
+
+  @IsOptional()
+  @IsString()
+  password: string;
+
+  @IsOptional()
+  @IsEmail()
+  email: string;
+
+  @IsOptional()
+  @IsString()
+  address: string;
+
+  @IsOptional()
+  @IsString()
+  detailAddress: string;
+
+  @IsOptional()
+  @IsString()
+  phone: string;
+}
