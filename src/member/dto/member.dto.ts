@@ -40,10 +40,6 @@ export class LoginDto {
   password: string;
 }
 export class UpdateDto {
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
   @IsOptional()
   @IsString()
   name: string;

@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
 import { MemberService } from './member.service';
 import { LoginDto, MemberCreateDto, UpdateDto } from './dto/member.dto';
 
@@ -16,9 +24,9 @@ export class MemberController {
     return this.memberService.createMember(memberCreateDto);
   }
 
-  @Post('updatemember')
-  async updatemember(@Body() updateDto: UpdateDto) {
-    return await this.memberService.updatemember(updateDto);
+  @Patch(':id')
+  async updatemember(@Param('id') id: string, @Body() updateDto: UpdateDto) {
+    return await this.memberService.updatemember(id, updateDto);
   }
   @Delete(':id')
   async deletemember(@Param('id') id: string) {

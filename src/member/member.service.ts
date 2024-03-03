@@ -13,7 +13,7 @@ export class MemberService {
   ) {}
 
   findAll() {
-    return `This action returns all test`;
+    return `${process.env.SERVER_PORT}번으로 서비스중`;
   }
 
   async idCheck(id: string) {
@@ -58,11 +58,8 @@ export class MemberService {
     }
   }
 
-  async updatemember(updateDto: UpdateDto) {
+  async updatemember(id: string, updateDto: UpdateDto) {
     const data = { ...updateDto };
-
-    delete data.id;
-    delete data.password;
 
     for (const key in data) {
       if (data[key] === null || data[key] === undefined || data[key] === '') {
@@ -70,7 +67,7 @@ export class MemberService {
       }
     }
     console.log(data);
-    return await this.memberRepository.update({ id: updateDto.id }, data);
+    return await this.memberRepository.update({ id }, data);
   }
 
   async deletemember(id: string) {
