@@ -1,16 +1,15 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { BoardEntity } from './entities/board.entity';
 import { Repository } from 'typeorm';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
+import { MemberService } from '../member/member.service';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BoardService {
-  constructor(
-    @InjectRepository(BoardEntity)
-    private boardRepository: Repository<BoardEntity>,
-    // private memberRepository: Repository<MemberService>,
-  ) {}
+  @InjectRepository(BoardEntity)
+  private boardRepository: Repository<BoardEntity>;
+  constructor(private memberService: MemberService) {}
 
   list(boardId: number) {
     console.log(boardId);
@@ -26,8 +25,13 @@ export class BoardService {
     const sendBoard: any = { ...board };
     sendBoard.date = new Date();
     sendBoard.editDate = new Date();
+    const result = await this.boardRepository.save(sendBoard);
 
-    return await this.boardRepository.save(sendBoard);
+    return {
+      statusCode: 200,
+      message: '게시글 작성 성공',
+      data: result,
+    };
   }
 
   async update(boardId: number, board: UpdateBoardDto) {
@@ -44,10 +48,15 @@ export class BoardService {
     }
     sendBoard.editDate = new Date();
 
-    return await this.boardRepository.update({ boardId }, sendBoard);
+    const result = await this.boardRepository.update({ boardId }, sendBoard);
+
+    return { statusCode: 200, message: '게시글 수정 완료', data: result };
   }
 
   async delete(boardId: number) {
     return await this.boardRepository.delete({ boardId });
+  }
+  async test() {
+    await this.memberService.test();
   }
 }

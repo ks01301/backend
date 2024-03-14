@@ -3,18 +3,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MemberModule } from './member/member.module';
-import { BoardModule } from './board/board.module';
+import { MemberModule } from './crud/member/member.module';
+import { BoardModule } from './crud/board/board.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: [
-        process.env.ENV === 'production'
-          ? '.env.production'
-          : '.env.development',
-      ],
+      envFilePath: `.env.${process.env.ENV}`,
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',

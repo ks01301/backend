@@ -1,9 +1,9 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { MemberEntity } from './entities/member.entity';
 import * as bcrypt from 'bcrypt';
 import { LoginDto, UpdateDto } from './dto/member.dto';
+import { MemberEntity } from './entities/member.entity';
+import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class MemberService {
@@ -48,13 +48,17 @@ export class MemberService {
   async createMember(memberCreateDto) {
     const idCheck = await this.idCheck(memberCreateDto.id);
     if (idCheck) {
-      throw new Error('이미 존재하는 아이디입니다.');
+      return {
+        status: 400,
+        message: 'Member already exists',
+      };
     } else {
       memberCreateDto.password = await bcrypt.hash(
         memberCreateDto.password,
         10,
       );
-      return await this.memberRepository.save(memberCreateDto);
+      const result = await this.memberRepository.save(memberCreateDto);
+      return { status: 200, message: '계정 생성 완료', data: result };
     }
   }
 
@@ -86,10 +90,15 @@ export class MemberService {
       if (passwordCheck) {
         return '로그인 성공';
       } else {
-        throw new UnauthorizedException('비밀번호가 틀렸습니다.');
+        return { status: 401, message: '비밀번호가 틀렸습니다.' };
       }
     } else {
-      throw new UnauthorizedException('존재하지 않는 아이디입니다.');
+      return { status: 401, message: '존재하지 않는 아이디입니다.' };
     }
+  }
+
+  async test() {
+    console.log('member service test');
+    return 'asdfadf';
   }
 }

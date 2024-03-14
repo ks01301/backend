@@ -3,8 +3,8 @@ import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
 import { BoardEntity } from './entities/board.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MemberService } from 'src/member/member.service';
-import { MemberEntity } from 'src/member/entities/member.entity';
+import { MemberService } from '../member/member.service';
+import { MemberEntity } from '../member/entities/member.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([BoardEntity, MemberEntity])],
