@@ -48,35 +48,4 @@ export class AuthService {
       }
     }
   }
-
-  async loginget(id: string, password: string) {
-    const loginUser = await this.memberRepository.findOne({
-      where: { id },
-    });
-
-    if (!loginUser)
-      throw new UnauthorizedException({ status: 401, message: '없는 아이디' });
-    else {
-      const verifyPassword = await bcrypt.compare(password, loginUser.password);
-
-      if (!verifyPassword)
-        throw new UnauthorizedException({
-          status: 401,
-          massage: '비밀번호 틀림',
-        });
-      else {
-        const payload: Payload = { id: loginUser.id };
-        const accessToken = this.jwtService.sign(payload);
-
-        return {
-          status: 201,
-          message: '로그인 성공',
-          result: {
-            id: loginUser.id,
-            accessToken,
-          },
-        };
-      }
-    }
-  }
 }
