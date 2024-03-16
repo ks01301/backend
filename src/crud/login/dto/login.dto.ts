@@ -9,3 +9,8 @@ export class LoginDto {
   @IsNotEmpty()
   password: string;
 }
+
+export class RefreshTokenDto {
+  @IsNotEmpty()
+  refresh_token: string;
+}

@@ -1,5 +1,5 @@
 import { JwtService } from '@nestjs/jwt';
-import { LoginDto } from './dto/login.dto';
+import { LoginDto } from '../login/dto/login.dto';
 import * as bcrypt from 'bcrypt';
 import { Payload } from './security/payload.interface';
 import { Repository } from 'typeorm';

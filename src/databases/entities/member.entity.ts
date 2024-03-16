@@ -29,4 +29,10 @@ export class MemberEntity extends BaseEntity {
 
   @Column({ default: true, comment: '계정 활성화 여부' })
   isActive: boolean;
+
+  @Column({ nullable: true, comment: 'jwt refrsh token' })
+  currentRefreshToken: string;
+
+  @Column({ type: 'timestamptz', nullable: true, comment: 'jwt refresh exp' })
+  currentRefreshTokenExp: Date;
 }

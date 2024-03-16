@@ -7,6 +7,7 @@ import { MemberModule } from './crud/member/member.module';
 import { BoardModule } from './crud/board/board.module';
 import { AuthModule } from './crud/auth/auth.module';
 import { CommonModule } from './crud/common/common.module';
+import { LoginModule } from './crud/login/login.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { CommonModule } from './crud/common/common.module';
     BoardModule,
     AuthModule,
     CommonModule,
+    LoginModule,
   ],
   controllers: [AppController],
   providers: [AppService],

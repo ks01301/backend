@@ -5,7 +5,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
-import { JwtStrategy } from './security/passport.jwt.strategy';
 
 @Module({
   imports: [
@@ -20,6 +19,7 @@ import { JwtStrategy } from './security/passport.jwt.strategy';
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, JwtModule, JwtStrategy],
+  // ! JwtStrategy 에러나면 privider에 추가
+  providers: [AuthService, JwtModule],
 })
 export class AuthModule {}
