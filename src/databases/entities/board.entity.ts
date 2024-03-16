@@ -1,9 +1,8 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
-
-export class Board {}
+import { BaseEntity } from '../baseEntity.ts/base.entity';
 
 @Entity({ name: 'board' })
-export class BoardEntity {
+export class BoardEntity extends BaseEntity {
   @PrimaryGeneratedColumn()
   boardId: number;
 

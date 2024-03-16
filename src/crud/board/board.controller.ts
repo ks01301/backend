@@ -6,9 +6,12 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
+import { AuthGuard } from '../auth/security/auth.guard';
+import { GetUser } from './../auth/security/get-user.decorator';
 
 @Controller('board')
 export class BoardController {
@@ -21,10 +24,13 @@ export class BoardController {
   listGet(@Param('boardId') boardId: number) {
     return this.boardService.list(boardId);
   }
+
+  @UseGuards(AuthGuard)
   @Post('craeteboard')
-  write(@Body() body: CreateBoardDto) {
-    return this.boardService.write(body);
+  write(@GetUser() user: Request, @Body() body: CreateBoardDto) {
+    return this.boardService.write(user, body);
   }
+
   @Patch(':boardId')
   update(@Param('boardId') boardId: number, @Body() body: UpdateBoardDto) {
     return this.boardService.update(boardId, body);

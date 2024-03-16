@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { BoardEntity } from './entities/board.entity';
+import { BoardEntity } from '../../databases/entities/board.entity';
 import { Repository } from 'typeorm';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
 import { MemberService } from '../member/member.service';
@@ -7,9 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class BoardService {
-  @InjectRepository(BoardEntity)
-  private boardRepository: Repository<BoardEntity>;
-  constructor(private memberService: MemberService) {}
+  constructor(
+    private memberService: MemberService,
+    @InjectRepository(BoardEntity)
+    private readonly boardRepository: Repository<BoardEntity>,
+  ) {}
 
   async list(boardId: number) {
     const result = await this.boardRepository.findOne({ where: { boardId } });
@@ -20,11 +22,11 @@ export class BoardService {
     else return { status: 200, message: '게시판 불러오기 성공', data: result };
   }
 
-  async write(board: CreateBoardDto) {
+  async write(user: any, board: CreateBoardDto) {
+    console.log('aa', user.id);
     const sendBoard: any = { ...board };
     sendBoard.date = new Date();
     sendBoard.editDate = new Date();
-    // const result = await this.boardRepository.save(sendBoard);
 
     try {
       const result = await this.boardRepository.save(sendBoard);

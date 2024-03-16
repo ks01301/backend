@@ -2,19 +2,15 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { LoginDto, UpdateDto } from './dto/member.dto';
-import { MemberEntity } from './entities/member.entity';
+import { MemberEntity } from '../../databases/entities/member.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class MemberService {
   constructor(
     @InjectRepository(MemberEntity)
-    private memberRepository: Repository<MemberEntity>,
+    private readonly memberRepository: Repository<MemberEntity>,
   ) {}
-
-  findAll() {
-    return `${process.env.SERVER_PORT}번으로 서비스중`;
-  }
 
   async idCheck(id: string) {
     const idCheck = await this.memberRepository.findOne({

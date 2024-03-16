@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { BoardController } from './board.controller';
-import { BoardEntity } from './entities/board.entity';
+import { BoardEntity } from '../../databases/entities/board.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MemberService } from '../member/member.service';
-import { MemberEntity } from '../member/entities/member.entity';
+import { MemberEntity } from '../../databases/entities/member.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([BoardEntity, MemberEntity])],

@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MemberModule } from './crud/member/member.module';
 import { BoardModule } from './crud/board/board.module';
+import { AuthModule } from './crud/auth/auth.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { BoardModule } from './crud/board/board.module';
     }),
     MemberModule,
     BoardModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,23 +1,10 @@
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  Patch,
-  Post,
-} from '@nestjs/common';
+import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { MemberService } from './member.service';
 import { LoginDto, MemberCreateDto, UpdateDto } from './dto/member.dto';
 
 @Controller('member')
 export class MemberController {
   constructor(private readonly memberService: MemberService) {}
-
-  @Get()
-  findAll() {
-    return this.memberService.findAll();
-  }
 
   @Post('signup')
   async createMember(@Body() body: MemberCreateDto) {
