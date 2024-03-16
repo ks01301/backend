@@ -11,7 +11,7 @@ import {
 import { BoardService } from './board.service';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
 import { AuthGuard } from '../auth/security/auth.guard';
-import { GetUser } from './../auth/security/get-user.decorator';
+import { GetUser } from '../auth/get-user.decorator';
 
 @Controller('board')
 export class BoardController {
@@ -27,18 +27,21 @@ export class BoardController {
 
   @UseGuards(AuthGuard)
   @Post('craeteboard')
-  write(@GetUser() user: Request, @Body() body: CreateBoardDto) {
-    return this.boardService.write(user, body);
+  write(@GetUser() user, @Body() body: CreateBoardDto) {
+    return this.boardService.write(user.id, body);
   }
 
   @Patch(':boardId')
   update(@Param('boardId') boardId: number, @Body() body: UpdateBoardDto) {
     return this.boardService.update(boardId, body);
   }
+
+  @UseGuards(AuthGuard)
   @Delete(':boardId')
-  delete(@Param('boardId') boardId: number) {
-    return this.boardService.delete(boardId);
+  delete(@GetUser() user, @Param('boardId') boardId: number) {
+    return this.boardService.delete(user.id, boardId);
   }
+
   @Get()
   test() {
     return this.boardService.test();

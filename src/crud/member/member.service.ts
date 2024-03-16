@@ -58,43 +58,32 @@ export class MemberService {
     }
   }
 
-  async updatemember(id: string, updateDto: UpdateDto) {
-    const data = { ...updateDto };
+  async updatemember(id: string, updateData: UpdateDto) {
+    const user = await this.memberRepository.findOne({ where: { id } });
 
-    for (const key in data) {
-      if (data[key] === null || data[key] === undefined || data[key] === '') {
-        delete data[key];
-      }
+    if (!user) return { status: 404, message: '존재하지 않는 아이디' };
+
+    try {
+      const result = await this.memberRepository.update({ id }, updateData);
+      if (result.affected === 0)
+        return { status: 400, message: '업데이트 실패' };
+      return { status: 200, message: '수정 성공' };
+    } catch (err) {
+      console.log(err);
+      return { status: 401, message: '수정 실패', result: err };
     }
-    console.log(data);
-    return await this.memberRepository.update({ id }, data);
   }
 
   async deletemember(id: string) {
     const idCheck = await this.idCheck(id);
     if (idCheck) {
-      return await this.memberRepository.delete({ id });
+      await this.memberRepository.delete({ id });
+      return { status: 200, message: '아이디 삭제 성공' };
     } else {
-      throw new UnauthorizedException('아이디 없음');
+      throw new UnauthorizedException({
+        status: 401,
+        message: '존재하지 않는 아이디',
+      });
     }
-  }
-
-  async login(loginDto: LoginDto) {
-    const idCheck = await this.idCheck(loginDto.id);
-    if (idCheck) {
-      const passwordCheck = await this.passwordCheck(loginDto);
-      if (passwordCheck) {
-        return '로그인 성공';
-      } else {
-        return { status: 401, message: '비밀번호가 틀렸습니다.' };
-      }
-    } else {
-      return { status: 401, message: '존재하지 않는 아이디입니다.' };
-    }
-  }
-
-  async test() {
-    console.log('member service test');
-    return 'asdfadf';
   }
 }

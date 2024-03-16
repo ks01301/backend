@@ -1,6 +1,6 @@
 import { Body, Controller, Delete, Param, Patch, Post } from '@nestjs/common';
 import { MemberService } from './member.service';
-import { LoginDto, MemberCreateDto, UpdateDto } from './dto/member.dto';
+import { MemberCreateDto, UpdateDto } from './dto/member.dto';
 
 @Controller('member')
 export class MemberController {
@@ -18,9 +18,5 @@ export class MemberController {
   @Delete(':id')
   async deletemember(@Param('id') id: string) {
     return await this.memberService.deletemember(id);
-  }
-  @Post('login')
-  async login(@Body() body: LoginDto) {
-    return await this.memberService.login(body);
   }
 }

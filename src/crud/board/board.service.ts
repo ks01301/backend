@@ -4,11 +4,13 @@ import { Repository } from 'typeorm';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
 import { MemberService } from '../member/member.service';
 import { InjectRepository } from '@nestjs/typeorm';
+import { CommonService } from '../common/common.service';
 
 @Injectable()
 export class BoardService {
   constructor(
     private memberService: MemberService,
+    private readonly commonService: CommonService,
     @InjectRepository(BoardEntity)
     private readonly boardRepository: Repository<BoardEntity>,
   ) {}
@@ -22,9 +24,9 @@ export class BoardService {
     else return { status: 200, message: '게시판 불러오기 성공', data: result };
   }
 
-  async write(user: any, board: CreateBoardDto) {
-    console.log('aa', user.id);
-    const sendBoard: any = { ...board };
+  async write(userId: any, board: CreateBoardDto) {
+    console.log(userId);
+    const sendBoard: any = { ...board, userId };
     sendBoard.date = new Date();
     sendBoard.editDate = new Date();
 
@@ -73,10 +75,26 @@ export class BoardService {
       };
   }
 
-  async delete(boardId: number) {
-    return await this.boardRepository.delete({ boardId });
+  async delete(userId: string, boardId: number) {
+    const board = await this.boardRepository.findOne({
+      where: { boardId },
+    });
+
+    if (!board) return { status: 400, message: '없는 게시판' };
+
+    if (board.userId === userId) {
+      this.boardRepository.delete({ boardId });
+      return {
+        status: 200,
+        message: '게시글 삭제 성공',
+      };
+    } else
+      return {
+        status: 400,
+        message: '작성자가',
+      };
   }
   async test() {
-    await this.memberService.test();
+    return await this.commonService.test();
   }
 }
