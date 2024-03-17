@@ -35,4 +35,11 @@ export class MemberEntity extends BaseEntity {
 
   @Column({ type: 'timestamptz', nullable: true, comment: 'jwt refresh exp' })
   currentRefreshTokenExp: Date;
+
+  @Column({
+    default: 'normal',
+    nullable: true,
+    comment: 'admin: 관리자, normal: 일반 유저',
+  })
+  grade: string;
 }

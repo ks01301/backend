@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { BoardEntity } from '../../databases/entities/board.entity';
-import { Repository } from 'typeorm';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
 import { MemberService } from '../member/member.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CommonService } from '../common/common.service';
+import { BoardEntity } from 'src/databases/entities/board.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class BoardService {
@@ -16,8 +16,19 @@ export class BoardService {
   ) {}
 
   async list(boardId: number) {
+    if (boardId === null) {
+      const result = await this.boardRepository.find({
+        where: { boardId },
+        order: { boardId: 'desc' },
+      });
+      return {
+        status: 200,
+        message: '게시판 전체 불러오기 성공',
+        data: result,
+      };
+    }
+
     const result = await this.boardRepository.findOne({ where: { boardId } });
-    console.log(result);
 
     if (result === null || result === undefined)
       return { status: 200, message: '없는 게시판입니다' };
@@ -25,7 +36,6 @@ export class BoardService {
   }
 
   async write(userId: any, board: CreateBoardDto) {
-    console.log(userId);
     const sendBoard: any = { ...board, userId };
     sendBoard.date = new Date();
     sendBoard.editDate = new Date();
@@ -75,14 +85,21 @@ export class BoardService {
       };
   }
 
-  async delete(userId: string, boardId: number) {
+  async delete(user: any, boardId: number) {
     const board = await this.boardRepository.findOne({
       where: { boardId },
     });
 
     if (!board) return { status: 400, message: '없는 게시판' };
 
-    if (board.userId === userId) {
+    if (user.grade === 'admin') {
+      this.boardRepository.delete({ boardId });
+      return {
+        status: 200,
+        message: '게시글 삭제 성공',
+      };
+    }
+    if (board.userId === user.id) {
       this.boardRepository.delete({ boardId });
       return {
         status: 200,
@@ -91,7 +108,7 @@ export class BoardService {
     } else
       return {
         status: 400,
-        message: '작성자가',
+        message: '게시글 작성자가 아닙니다.',
       };
   }
   async test() {

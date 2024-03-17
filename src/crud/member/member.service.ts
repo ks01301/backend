@@ -58,7 +58,7 @@ export class MemberService {
     }
   }
 
-  async updatemember(id: string, updateData: UpdateDto) {
+  async updateMember(id: string, updateData: UpdateDto) {
     const user = await this.memberRepository.findOne({ where: { id } });
 
     if (!user) return { status: 404, message: '존재하지 않는 아이디' };
@@ -74,7 +74,7 @@ export class MemberService {
     }
   }
 
-  async deletemember(id: string) {
+  async deleteMember(id: string) {
     const idCheck = await this.idCheck(id);
     if (idCheck) {
       await this.memberRepository.delete({ id });
@@ -84,6 +84,41 @@ export class MemberService {
         status: 401,
         message: '존재하지 않는 아이디',
       });
+    }
+  }
+
+  async memberList(user, id: string) {
+    if (!id) {
+      if (user.grade === 'admin') {
+        const userList = await this.memberRepository.find();
+        return {
+          status: 200,
+          message: '유저 리스트 조회 성공',
+          result: userList,
+        };
+      } else return { status: 401, message: '권한 없음' };
+    }
+
+    const userList = await this.memberRepository.findOne({ where: { id } });
+
+    if (!userList) return { status: 200, message: '해당 유저가 없습니다.' };
+
+    switch (user.grade) {
+      case 'admin':
+        return {
+          status: 200,
+          message: '유저 정보 조회 성공',
+          result: userList,
+        };
+      case 'user':
+        if (user.id === userList.id)
+          return {
+            status: 200,
+            message: '유저 정보 조회 성공',
+            result: userList,
+          };
+      default:
+        return { status: 400, message: '권한이 없습니다.' };
     }
   }
 }

@@ -1,15 +1,19 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   Res,
   UnauthorizedException,
+  UseGuards,
 } from '@nestjs/common';
 import { LoginService } from './login.service';
 import { LoginDto, RefreshTokenDto } from './dto/login.dto';
 import { Response } from 'express';
 import { JwtService } from '@nestjs/jwt';
+import { GetUser } from '../auth/get-user.decorator';
+import { AuthGuard } from '../auth/security/auth.guard';
 
 @Controller('login')
 export class LoginController {
@@ -25,9 +29,15 @@ export class LoginController {
   ) {
     const user = await this.loginService.validateUser(body.id, body.password);
 
-    const access_token = await this.loginService.generateAccessToken(user.id);
+    const access_token = await this.loginService.generateAccessToken(
+      user.id,
+      user.grade,
+    );
 
-    const refresh_token = await this.loginService.generateRefreshToken(user.id);
+    const refresh_token = await this.loginService.generateRefreshToken(
+      user.id,
+      user.grade,
+    );
 
     await this.loginService.setCurrentRefreshToken(refresh_token, user.id);
 
@@ -44,6 +54,7 @@ export class LoginController {
       time: Date(),
       result: {
         id: user.id,
+        graded: user.grade,
         access_token: access_token,
         refresh_token: refresh_token,
       },
@@ -92,5 +103,12 @@ export class LoginController {
       message: 'logout success',
       time: Date(),
     });
+  }
+
+  @UseGuards(AuthGuard)
+  @Get('')
+  async memberList(@GetUser() user) {
+    console.log(user);
+    return user;
   }
 }

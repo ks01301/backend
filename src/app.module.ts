@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './app/app.controller';
+import { AppService } from './app/app.service';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { MemberModule } from './crud/member/member.module';
-import { BoardModule } from './crud/board/board.module';
-import { AuthModule } from './crud/auth/auth.module';
-import { CommonModule } from './crud/common/common.module';
-import { LoginModule } from './crud/login/login.module';
+import { MemberModule } from 'src/crud/member/member.module';
+import { BoardModule } from 'src/crud/board/board.module';
+import { AuthModule } from 'src/crud/auth/auth.module';
+import { CommonModule } from 'src/crud/common/common.module';
+import { LoginModule } from 'src/crud/login/login.module';
 
 @Module({
   imports: [

@@ -34,21 +34,23 @@ export class LoginService {
     return user;
   }
 
-  async generateAccessToken(id: string) {
+  async generateAccessToken(id: string, grade: string) {
     const payload: Payload = {
       id,
+      grade,
     };
-    return this.jwtService.signAsync(payload, {
+    return await this.jwtService.signAsync(payload, {
       secret: process.env.JWT_SECRET,
       expiresIn: process.env.JWT_EXP,
     });
   }
 
-  async generateRefreshToken(id) {
+  async generateRefreshToken(id: string, grade: string) {
     const payload: Payload = {
       id,
+      grade,
     };
-    return this.jwtService.signAsync(payload, {
+    return await this.jwtService.signAsync(payload, {
       secret: 'kCuLPyCLYydCYqn',
       // secret: process.env.JWT_REFRSH_SECRET,
       expiresIn: process.env.JWT_REFRESH_EXP,
@@ -97,6 +99,7 @@ export class LoginService {
 
     // Check if user exists
     const userId = decodedRefreshToken.id;
+    const userGrade = decodedRefreshToken.grade;
     console.log('userId', userId);
     const user = await this.getUserIfRefreshTokenMatches(refresh_token, userId);
     if (!user) {
@@ -104,9 +107,12 @@ export class LoginService {
     }
 
     // Generate new access token
-    const accessToken = await this.generateAccessToken(userId);
+    const accessToken = await this.generateAccessToken(userId, userGrade);
 
-    const new_refresh_token = await this.generateRefreshToken(userId);
+    const new_refresh_token = await this.generateRefreshToken(
+      userId,
+      userGrade,
+    );
 
     await this.setCurrentRefreshToken(new_refresh_token, user.id);
 

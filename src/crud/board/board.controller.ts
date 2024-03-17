@@ -40,7 +40,7 @@ export class BoardController {
   @UseGuards(AuthGuard)
   @Delete(':boardId')
   delete(@GetUser() user, @Param('boardId') boardId: number) {
-    return this.boardService.delete(user.id, boardId);
+    return this.boardService.delete(user, boardId);
   }
 
   @Get()

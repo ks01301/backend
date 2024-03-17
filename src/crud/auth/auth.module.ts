@@ -1,9 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AuthService } from './auth.service';
 import { MemberEntity } from 'src/databases/entities/member.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AuthController } from './auth.controller';
 import { PassportModule } from '@nestjs/passport';
 
 @Module({
@@ -18,8 +16,8 @@ import { PassportModule } from '@nestjs/passport';
     }),
     PassportModule.register({ defaultStrategy: 'jwt' }),
   ],
-  controllers: [AuthController],
+  controllers: [],
   // ! JwtStrategy 에러나면 privider에 추가
-  providers: [AuthService, JwtModule],
+  providers: [JwtModule],
 })
 export class AuthModule {}
