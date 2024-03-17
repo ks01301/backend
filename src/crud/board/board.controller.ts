@@ -18,6 +18,7 @@ export class BoardController {
   constructor(private readonly boardService: BoardService) {}
   @Get('list')
   list() {
+    console.log(__dirname);
     return this.boardService.list(null);
   }
   @Get('list/:boardId')
