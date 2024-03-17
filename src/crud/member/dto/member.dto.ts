@@ -28,6 +28,10 @@ export class MemberCreateDto {
   @IsOptional()
   @IsString()
   phone: string;
+
+  @IsOptional()
+  @IsString()
+  grade: string;
 }
 
 export class LoginDto {
@@ -40,10 +44,6 @@ export class LoginDto {
   password: string;
 }
 export class UpdateDto {
-  @IsString()
-  @IsNotEmpty()
-  id: string;
-
   @IsOptional()
   @IsString()
   name: string;
@@ -67,4 +67,8 @@ export class UpdateDto {
   @IsOptional()
   @IsString()
   phone: string;
+
+  @IsOptional()
+  @IsString()
+  grade: string;
 }
