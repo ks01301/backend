@@ -37,8 +37,6 @@ export class BoardService {
 
   async write(userId: any, board: CreateBoardDto) {
     const sendBoard: any = { ...board, userId };
-    sendBoard.date = new Date();
-    sendBoard.editDate = new Date();
 
     try {
       const result = await this.boardRepository.save(sendBoard);
@@ -68,7 +66,7 @@ export class BoardService {
         delete sendBoard[key];
       }
     }
-    sendBoard.editDate = new Date();
+    sendBoard.updateDateAt = new Date();
 
     const result = await this.boardRepository.update({ boardId }, sendBoard);
     console.log(result.affected);

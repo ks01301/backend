@@ -8,6 +8,9 @@ export class CreateBoardDto {
   @IsString()
   @IsNotEmpty()
   content: string;
+
+  @IsString()
+  kategorie: string;
 }
 
 export class UpdateBoardDto {
