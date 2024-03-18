@@ -11,6 +11,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Payload } from '../auth/security/payload.interface';
 import { JwtService } from '@nestjs/jwt';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class LoginService {
@@ -18,6 +19,7 @@ export class LoginService {
     @InjectRepository(MemberEntity)
     private readonly memberRepository: Repository<MemberEntity>,
     private jwtService: JwtService,
+    private readonly configService: ConfigService,
   ) {}
 
   async validateUser(id, password) {
@@ -50,9 +52,9 @@ export class LoginService {
       id,
       grade,
     };
+
     return await this.jwtService.signAsync(payload, {
-      secret: 'kCuLPyCLYydCYqn',
-      // secret: process.env.JWT_REFRSH_SECRET,
+      secret: this.configService.get<string>('app.jwt.refresh_secret'),
       expiresIn: process.env.JWT_REFRESH_EXP,
     });
   }
@@ -71,10 +73,8 @@ export class LoginService {
   }
 
   async getCurrentHashedRefreshToken(refreshToken: string) {
-    console.log(refreshToken);
     const saltOrRounds = 10;
     const currentRefreshToken = await bcrypt.hash(refreshToken, saltOrRounds);
-    console.log(currentRefreshToken);
     return currentRefreshToken;
   }
 
@@ -100,7 +100,7 @@ export class LoginService {
     // Check if user exists
     const userId = decodedRefreshToken.id;
     const userGrade = decodedRefreshToken.grade;
-    console.log('userId', userId);
+
     const user = await this.getUserIfRefreshTokenMatches(refresh_token, userId);
     if (!user) {
       throw new UnauthorizedException('Invalid user!');

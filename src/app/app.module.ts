@@ -22,6 +22,7 @@ import { DatabaseOptionsService } from 'src/databases/service/database.options.s
     TypeOrmModule.forRootAsync({
       inject: [DatabaseOptionsService],
       imports: [DatabaseModule],
+
       useFactory: (databaseOptionsService: DatabaseOptionsService) =>
         databaseOptionsService.createTypeOrmOptions(),
     }),

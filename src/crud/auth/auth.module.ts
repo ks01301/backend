@@ -9,8 +9,7 @@ import { PassportModule } from '@nestjs/passport';
     TypeOrmModule.forFeature([MemberEntity]),
     JwtModule.registerAsync({
       useFactory: async () => ({
-        // secret: process.env.JWT_SECRET,
-        secret: 'lxmeISECRET',
+        secret: process.env.JWT_SECRET,
         signOptions: { expiresIn: process.env.JWT_EXP },
       }),
     }),

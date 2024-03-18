@@ -35,6 +35,9 @@ dependencies:
   '@types/bcrypt':
     specifier: ^5.0.2
     version: 5.0.2
+  '@types/multer':
+    specifier: ^1.4.11
+    version: 1.4.11
   '@types/passport-jwt':
     specifier: ^4.0.1
     version: 4.0.1
@@ -53,6 +56,9 @@ dependencies:
   cross-env:
     specifier: ^7.0.3
     version: 7.0.3
+  light-date:
+    specifier: ^1.2.0
+    version: 1.2.0
   passport:
     specifier: ^0.7.0
     version: 0.7.0
@@ -1343,6 +1349,12 @@ packages:
 
   /@types/mime@3.0.4:
     resolution: {integrity: sha512-iJt33IQnVRkqeqC7PzBHPTC6fDlRNRW8vjrgqtScAhrmMwe8c4Eo7+fUGTa+XdWrpEgpyKWMYmi2dIwMAYRzPw==}
+
+  /@types/multer@1.4.11:
+    resolution: {integrity: sha512-svK240gr6LVWvv3YGyhLlA+6LRRWA4mnGIU7RcNmgjBYFl6665wcXrRfxGp5tEPVHUNm5FMcmq7too9bxCwX/w==}
+    dependencies:
+      '@types/express': 4.17.21
+    dev: false
 
   /@types/node@20.11.24:
     resolution: {integrity: sha512-Kza43ewS3xoLgCEpQrsT+xRo/EJej1y0kVYGiLFE1NEODXGzTfwiC6tXTLMQskn1X4/Rjlh0MQUvx9W+L9long==}
@@ -4211,6 +4223,11 @@ packages:
 
   /libphonenumber-js@1.10.57:
     resolution: {integrity: sha512-OjsEd9y4LgcX+Ig09SbxWqcGESxliDDFNVepFhB9KEsQZTrnk3UdEU+cO0sW1APvLprHstQpS23OQpZ3bwxy6Q==}
+
+  /light-date@1.2.0:
+    resolution: {integrity: sha512-fdndhOogZm9m/XeAmP+UDgvplEd3SEfFoS3ObI6xhLmNyX3VdT+Ss8mddvP3XmVnh7I3t/Yg4OuFvWvYD+YBeA==}
+    engines: {node: '>=10'}
+    dev: false
 
   /lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
