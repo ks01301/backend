@@ -11,7 +11,6 @@ import { LoginModule } from 'src/crud/login/login.module';
 import Configs from '../config/index';
 import { DatabaseModule } from 'src/databases/database.module';
 import { DatabaseOptionsService } from 'src/databases/service/database.options.service';
-import { FilesModule } from 'src/crud/files/files.module';
 
 @Module({
   imports: [
@@ -23,6 +22,7 @@ import { FilesModule } from 'src/crud/files/files.module';
     TypeOrmModule.forRootAsync({
       inject: [DatabaseOptionsService],
       imports: [DatabaseModule],
+
       useFactory: (databaseOptionsService: DatabaseOptionsService) =>
         databaseOptionsService.createTypeOrmOptions(),
     }),
@@ -31,7 +31,6 @@ import { FilesModule } from 'src/crud/files/files.module';
     AuthModule,
     CommonModule,
     LoginModule,
-    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
