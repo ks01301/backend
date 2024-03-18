@@ -109,6 +109,7 @@ export class BoardService {
         message: '게시글 작성자가 아닙니다.',
       };
   }
+
   async test() {
     return await this.commonService.test();
   }

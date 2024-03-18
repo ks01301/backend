@@ -6,15 +6,12 @@ import {
   Param,
   Patch,
   Post,
-  UploadedFiles,
   UseGuards,
-  UseInterceptors,
 } from '@nestjs/common';
 import { BoardService } from './board.service';
 import { CreateBoardDto, UpdateBoardDto } from './dto/board.dto';
 import { AuthGuard } from '../auth/security/auth.guard';
 import { GetUser } from '../auth/get-user.decorator';
-import { FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('board')
 export class BoardController {
@@ -45,15 +42,6 @@ export class BoardController {
   @Delete(':boardId')
   delete(@GetUser() user, @Param('boardId') boardId: number) {
     return this.boardService.delete(user, boardId);
-  }
-
-  @UseInterceptors(FilesInterceptor('file'))
-  @UseGuards(AuthGuard)
-  @Post('upload')
-  uploadImg(@UploadedFiles() files: Array<Express.Multer.File>) {
-    console.log(files);
-    console.log('a');
-    return files;
   }
 
   @Get()

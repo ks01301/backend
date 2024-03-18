@@ -108,7 +108,6 @@ export class LoginController {
   @UseGuards(AuthGuard)
   @Get('')
   async memberList(@GetUser() user) {
-    console.log(user);
     return user;
   }
 }

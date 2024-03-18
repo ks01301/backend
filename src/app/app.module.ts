@@ -11,6 +11,7 @@ import { LoginModule } from 'src/crud/login/login.module';
 import Configs from '../config/index';
 import { DatabaseModule } from 'src/databases/database.module';
 import { DatabaseOptionsService } from 'src/databases/service/database.options.service';
+import { FilesModule } from 'src/crud/files/files.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { DatabaseOptionsService } from 'src/databases/service/database.options.s
     AuthModule,
     CommonModule,
     LoginModule,
+    FilesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
