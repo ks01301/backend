@@ -3,10 +3,6 @@ import { registerAs } from '@nestjs/config';
 export default registerAs(
   'app',
   (): Record<string, any> => ({
-    http: {
-      // host: process.env.APP_HOST || 'ts',
-      port: Number(process.env.SERVER_PORT) || 3000,
-    },
     jwt: {
       access_secret: process.env.JWT_SECRET || 'SECRET',
       refresh_secret: process.env.JWT_REFRESH_SECRET || 'SECRET',

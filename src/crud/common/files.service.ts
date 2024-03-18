@@ -26,7 +26,7 @@ export class FilesService {
       await this.filesRepository.save(uploadFile);
 
       fileList.push({
-        url: `http://localhost:5001/files/${path}/${file.filename}`,
+        url: `http://localhost:5001/files/${file.filename}`,
       });
     }
 
