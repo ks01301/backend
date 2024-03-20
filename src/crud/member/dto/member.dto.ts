@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export class MemberCreateDto {
   @IsString()
   @IsNotEmpty()
-  id: string;
+  member_id: string;
 
   @IsString()
   @IsNotEmpty()
@@ -37,7 +37,7 @@ export class MemberCreateDto {
 export class LoginDto {
   @IsString()
   @IsNotEmpty()
-  id: string;
+  member_id: string;
 
   @IsString()
   @IsNotEmpty()

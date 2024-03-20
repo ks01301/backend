@@ -1,0 +1,29 @@
+# name: aspera-api-server
+
+# on:
+#   # push:
+#   #   branches: main
+#   pull_request:
+#     branches: main
+#     types: [closed]
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+#     # if: github.event_name == 'push' || github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+#     if: github.event_name == 'pull_request' && github.event.action == 'closed' && github.event.pull_request.merged == true
+#     steps:
+#       - name: main branch
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.REMOTE_SSH_HOST }}
+#           username: ${{ secrets.REMOTE_SSH_UESRNAME }}
+#           password: ${{ secrets.REMOTE_SSH_PASSWORD }}
+#           port: ${{ secrets.REMOTE_SSH_PORT }}
+#           script_stop: true
+#           script: |
+#             cd /aspera-server-api/k-server
+#             git pull
+#             pnpm install
+#             pnpm build
+#             pm2 reload aspera-api-server-5020

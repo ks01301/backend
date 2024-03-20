@@ -15,11 +15,11 @@ export class BoardService {
     private readonly boardRepository: Repository<BoardEntity>,
   ) {}
 
-  async list(boardId: number) {
-    if (boardId === null) {
+  async list(id: number) {
+    if (id === null) {
       const result = await this.boardRepository.find({
-        where: { boardId },
-        order: { boardId: 'desc' },
+        where: { id },
+        order: { id: 'desc' },
       });
       return {
         status: 200,
@@ -28,15 +28,17 @@ export class BoardService {
       };
     }
 
-    const result = await this.boardRepository.findOne({ where: { boardId } });
+    const result = await this.boardRepository.findOne({
+      where: { id },
+    });
 
     if (result === null || result === undefined)
       return { status: 200, message: '없는 게시판입니다' };
     else return { status: 200, message: '게시판 불러오기 성공', data: result };
   }
 
-  async write(userId: any, board: CreateBoardDto) {
-    const sendBoard: any = { ...board, userId };
+  async write(member_id: string, board: CreateBoardDto) {
+    const sendBoard: any = { ...board, member_id };
 
     try {
       const result = await this.boardRepository.save(sendBoard);
@@ -54,7 +56,7 @@ export class BoardService {
     }
   }
 
-  async update(boardId: number, board: UpdateBoardDto) {
+  async update(id: number, board: UpdateBoardDto) {
     const sendBoard: any = { ...board };
 
     for (const key in sendBoard) {
@@ -68,8 +70,8 @@ export class BoardService {
     }
     sendBoard.updateDateAt = new Date();
 
-    const result = await this.boardRepository.update({ boardId }, sendBoard);
-    console.log(result.affected);
+    const result = await this.boardRepository.update({ id }, sendBoard);
+
     if (result.affected !== 0)
       return {
         status: 200,
@@ -83,22 +85,22 @@ export class BoardService {
       };
   }
 
-  async delete(user: any, boardId: number) {
+  async delete(user: any, id: number) {
     const board = await this.boardRepository.findOne({
-      where: { boardId },
+      where: { id },
     });
 
     if (!board) return { status: 400, message: '없는 게시판' };
 
     if (user.grade === 'admin') {
-      this.boardRepository.delete({ boardId });
+      this.boardRepository.delete({ id });
       return {
         status: 200,
         message: '게시글 삭제 성공',
       };
     }
-    if (board.userId === user.id) {
-      this.boardRepository.delete({ boardId });
+    if (board.member_id === user.member_id) {
+      this.boardRepository.delete({ id });
       return {
         status: 200,
         message: '게시글 삭제 성공',

@@ -27,19 +27,26 @@ export class LoginController {
     @Body() body: LoginDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const user = await this.loginService.validateUser(body.id, body.password);
+    console.log(body.member_id);
+    const user = await this.loginService.validateUser(
+      body.member_id,
+      body.password,
+    );
 
     const access_token = await this.loginService.generateAccessToken(
-      user.id,
+      user.member_id,
       user.grade,
     );
 
     const refresh_token = await this.loginService.generateRefreshToken(
-      user.id,
+      user.member_id,
       user.grade,
     );
 
-    await this.loginService.setCurrentRefreshToken(refresh_token, user.id);
+    await this.loginService.setCurrentRefreshToken(
+      refresh_token,
+      user.member_id,
+    );
 
     res.setHeader('Authorization', 'Bearer ' + [access_token, refresh_token]);
     res.cookie('access_token', access_token, {
@@ -53,7 +60,7 @@ export class LoginController {
       message: 'login success',
       time: Date(),
       result: {
-        id: user.id,
+        member_id: user.member_id,
         graded: user.grade,
         access_token: access_token,
         refresh_token: refresh_token,
