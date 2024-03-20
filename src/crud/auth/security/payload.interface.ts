@@ -1,4 +1,4 @@
 export interface Payload {
-  id: string;
+  member_id: string;
   grade: string;
 }

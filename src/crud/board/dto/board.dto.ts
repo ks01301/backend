@@ -10,7 +10,7 @@ export class CreateBoardDto {
   content: string;
 
   @IsString()
-  kategorie: string;
+  category: string;
 }
 
 export class UpdateBoardDto {

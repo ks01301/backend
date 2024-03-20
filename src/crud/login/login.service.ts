@@ -22,8 +22,8 @@ export class LoginService {
     private readonly configService: ConfigService,
   ) {}
 
-  async validateUser(id, password) {
-    const user = await this.memberRepository.findOne({ where: { id } });
+  async validateUser(member_id, password) {
+    const user = await this.memberRepository.findOne({ where: { member_id } });
 
     if (!user) {
       throw new NotFoundException('user Not found');
@@ -36,9 +36,9 @@ export class LoginService {
     return user;
   }
 
-  async generateAccessToken(id: string, grade: string) {
+  async generateAccessToken(member_id: string, grade: string) {
     const payload: Payload = {
-      id,
+      member_id,
       grade,
     };
     return await this.jwtService.signAsync(payload, {
@@ -47,9 +47,9 @@ export class LoginService {
     });
   }
 
-  async generateRefreshToken(id: string, grade: string) {
+  async generateRefreshToken(member_id: string, grade: string) {
     const payload: Payload = {
-      id,
+      member_id,
       grade,
     };
 
@@ -59,12 +59,12 @@ export class LoginService {
     });
   }
 
-  async setCurrentRefreshToken(refreshToken: string, id: string) {
+  async setCurrentRefreshToken(refreshToken: string, member_id: string) {
     const currentRefreshToken =
       await this.getCurrentHashedRefreshToken(refreshToken);
     const currentRefreshTokenExp = await this.getCurrentRefreshTokenExp();
     await this.memberRepository.update(
-      { id },
+      { member_id },
       {
         currentRefreshToken,
         currentRefreshTokenExp,
@@ -98,7 +98,7 @@ export class LoginService {
     }) as Payload;
 
     // Check if user exists
-    const userId = decodedRefreshToken.id;
+    const userId = decodedRefreshToken.member_id;
     const userGrade = decodedRefreshToken.grade;
 
     const user = await this.getUserIfRefreshTokenMatches(refresh_token, userId);
@@ -114,17 +114,17 @@ export class LoginService {
       userGrade,
     );
 
-    await this.setCurrentRefreshToken(new_refresh_token, user.id);
+    await this.setCurrentRefreshToken(new_refresh_token, user.member_id);
 
     return { accessToken };
   }
 
   async getUserIfRefreshTokenMatches(
     refreshToken: string,
-    id: string,
+    member_id: string,
   ): Promise<MemberEntity> {
     const user: MemberEntity = await this.memberRepository.findOneBy({
-      id,
+      member_id,
     });
 
     // user에 currentRefreshToken이 없다면 null을 반환 (즉, 토큰 값이 null일 경우)
@@ -144,9 +144,9 @@ export class LoginService {
     }
   }
 
-  async removeRefreshToken(id: string): Promise<any> {
+  async removeRefreshToken(member_id: string): Promise<any> {
     return await this.memberRepository.update(
-      { id },
+      { member_id },
       {
         currentRefreshToken: null,
         currentRefreshTokenExp: null,

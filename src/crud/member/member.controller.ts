@@ -25,9 +25,9 @@ export class MemberController {
   async updateMember(@Param('id') id: string, @Body() body: UpdateDto) {
     return await this.memberService.updateMember(id, body);
   }
-  @Delete(':id')
-  async deletemember(@Param('id') id: string) {
-    return await this.memberService.deleteMember(id);
+  @Delete(':member_id')
+  async deletemember(@Param('member_id') member_id: string) {
+    return await this.memberService.deleteMember(member_id);
   }
 
   @UseGuards(AuthGuard)
@@ -37,7 +37,7 @@ export class MemberController {
   }
   @UseGuards(AuthGuard)
   @Post('list/:id')
-  async memberAllList(@GetUser() user, @Param('id') id: string) {
-    return await this.memberService.memberList(user, id);
+  async memberAllList(@GetUser() user, @Param('id') member_id: string) {
+    return await this.memberService.memberList(user, member_id);
   }
 }

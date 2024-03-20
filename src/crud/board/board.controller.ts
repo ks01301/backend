@@ -29,8 +29,7 @@ export class BoardController {
   @UseGuards(AuthGuard)
   @Post('craeteboard')
   write(@GetUser() user, @Body() body: CreateBoardDto) {
-    console.log(user);
-    return this.boardService.write(user.id, body);
+    return this.boardService.write(user.member_id, body);
   }
 
   @Patch(':boardId')

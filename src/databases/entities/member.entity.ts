@@ -1,13 +1,10 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity } from 'typeorm';
 import { BaseEntity } from '../baseEntity.ts/base.entity';
 
 @Entity({ name: 'member' })
 export class MemberEntity extends BaseEntity {
-  @PrimaryGeneratedColumn({ comment: '유저 고유 번호, 자동생성' })
-  userNumber: number;
-
   @Column({ unique: true, comment: '아이디' })
-  id: string;
+  member_id: string;
 
   @Column({ comment: '비밀번호' })
   password: string;
