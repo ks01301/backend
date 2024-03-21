@@ -6,6 +6,7 @@ import {
   UseInterceptors,
   Res,
   UploadedFiles,
+  Delete,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FilesInterceptor } from '@nestjs/platform-express';
@@ -23,19 +24,24 @@ export class FilesController {
 
   // * filename은 다운로드 받는 파일명
 
-  @Get(':filename')
-  async getFile(@Param('filename') filename: string, @Res() res: Response) {
-    const file = await this.filesService.getFile(filename);
+  @Get(':file_id')
+  async getFile(@Param('file_id') file_id: string, @Res() res: Response) {
+    const file = await this.filesService.getFile(file_id);
     return res.sendFile(file.file_id, { root: `upload/${file.path}` });
   }
 
-  @Get('download/:filename')
+  @Get('download/:file_id')
   async fileDownload(
     @Param('path') path: string,
-    @Param('filename') filename: string,
+    @Param('file_id') file_id: string,
     @Res() res: Response,
   ) {
-    const file = await this.filesService.getFile(filename);
+    const file = await this.filesService.getFile(file_id);
+
     return res.download(`upload/${file.path}/${file.file_id}`, file.file_name);
+  }
+  @Delete(':file_id')
+  async fileDelete(@Param('file_id') file_id: string) {
+    return this.filesService.fileDelete(file_id);
   }
 }

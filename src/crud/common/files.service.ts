@@ -3,6 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { format } from 'light-date';
 import { FilesEntity } from 'src/databases/entities/files.entity';
 import { Repository } from 'typeorm';
+import * as fs from 'fs';
 
 @Injectable()
 export class FilesService {
@@ -50,5 +51,23 @@ export class FilesService {
     });
 
     return resFile;
+  }
+
+  async fileDelete(file_id: string) {
+    console.log(file_id);
+    const file = await this.filesRepository.findOne({ where: { file_id } });
+    console.log(file);
+
+    try {
+      fs.unlinkSync(
+        `${process.env.UPLOAD_DIRCTORY}/${file.path}/${file.file_id}`,
+      );
+
+      const data = await this.filesRepository.delete({ file_id });
+
+      return { statusCode: 200, message: 'file delete success', data };
+    } catch (err) {
+      return { statusCode: 400, message: 'Error deleting file', data: err };
+    }
   }
 }
